@@ -8,13 +8,13 @@ Mostly consists of interfaces and foundation work.
 Hopefully enough progress will be made for a terminal application that prints something along the lines of:
 `hello $(CURRENT_TEMP) world, it is $(HOW_HOT_IT_FEELS) today in $(CURRENT_LOCATION)!` 
 
-## about the application's internals and the three-party model
+## About the application's internals and the three-party model
 As of this early stage, WeatherSync is split into 3 main segments: the __provider__, the __consumer__ and the __log__.
-### provider
+### Provider
 this class is responsible for acquiring weather-related data from an external agent and generating a properly formatted __log__ upon request of the __consumer__.
-### log
+### Log
 this class contains whatever information the __consumer__ needs regarding weather (ex: temperature, cloudiness, pressure, humidity, UV index, dew point...)
-### consumer
+### Consumer
 this class uses whatever information needed from the __log__ it requests from the __provider__ in order to perform whatever duty it is designed to do.
 A wide variety of tasks may be carried on by the consumer, with outcomes affected by the information it pulls from the __log__.
 
