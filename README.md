@@ -5,7 +5,7 @@ This application is meant as practice for object-oriented pogramming and may be 
 ## Project status 
 Very early work in progress. _It just doesn't work™_!
 Mostly consists of interfaces and foundation work.
-Hopefully enough progress will be made for a terminal application that prints something along the lines of:
+Hopefully as work on the 'Primórdio' branch advances enough progress will be made for a terminal application that prints something along the lines of:
 `hello $(CURRENT_TEMP) world, it is $(HOW_HOT_IT_FEELS) today in $(CURRENT_LOCATION)!` 
 
 ## About the application's internals and the three-party model
