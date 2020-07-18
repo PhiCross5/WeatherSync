@@ -55,11 +55,13 @@ public class Provider_OpenWeather implements Provider {
                 .build();
         
         //base URL for JSON API requests to openWeather
-        requestURL="https://api.openweathermap.org/data/2.5/onecall?";
+        this.requestURL="https://api.openweathermap.org/data/2.5/onecall?";
         
         //default location for requests(São Paulo)
-        zone= new Location(-23.533773,-46.625290);
+        this.zone= new Location(-23.533773,-46.625290);
         
+	this.appid="";
+	
     }
     
     private void mapConditionCodes(){
@@ -70,7 +72,7 @@ public class Provider_OpenWeather implements Provider {
     }
     
     public double getTemperature(){
-        return 0.0;
+        return this.temperature;
     }
     //TODO: implement hashmap conversion for conditionCodes
     private WeatherStatus computeStatus(int conditionCode){
@@ -104,9 +106,9 @@ public class Provider_OpenWeather implements Provider {
         String rawJSON=service.send(request, HttpResponse.BodyHandlers.ofString()).body();
         JSONObject json=new JSONObject(rawJSON);
 	
-	json=json.getJSONObject("current");
+	json=json.getJSONObject("current");//weather for current time
 	double temp=json.getDouble("temp");
-	WeatherStatus id=computeStatus(json.getInt("weather.id"));
+	WeatherStatus id=computeStatus(json.getInt("weather.0.id"));
 	return new MinimalLog(id, temp);
 	}
 	//failure modes (may include: offline, interrupted, invalid, etc.)
@@ -115,6 +117,18 @@ public class Provider_OpenWeather implements Provider {
         }
         
         return null;
+    }
+    
+    
+    
+    //test functions (please remove after it's confirmed working)
+    
+    //json object parse test
+    public String JSONEntryPoint(String input){
+	JSONObject json=new JSONObject(input);
+	return "temperature is " + json.getDouble("current.temp")
+		+"\ncurrent ID is " + json.getInt("current.weather.0.id")
+		;
     }
     
 }
