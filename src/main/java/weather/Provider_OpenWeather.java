@@ -108,7 +108,11 @@ public class Provider_OpenWeather implements Provider {
 	
 	json=json.getJSONObject("current");//weather for current time
 	double temp=json.getDouble("temp");
-	WeatherStatus id=computeStatus(json.getInt("weather.0.id"));
+	//current.weather[0].id
+	WeatherStatus id=computeStatus(
+		json.getJSONArray("weather")
+		.getJSONObject(0)
+		.getInt("id"));
 	return new MinimalLog(id, temp);
 	}
 	//failure modes (may include: offline, interrupted, invalid, etc.)
