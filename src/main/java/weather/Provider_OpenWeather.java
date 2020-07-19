@@ -42,6 +42,13 @@ public class Provider_OpenWeather implements Provider {
     private Map<Integer, WeatherStatus> ConditionCodes_Coarse;//coarse codes (5xx=raining, 8xx=cloudy)
     private Map<Integer, WeatherStatus> ConditionCodes_Fine;
     
+    //NOTE TO SELF:
+    //PLEASE, FOR YOUR OWN GOOD
+    //DO NOT INCLUDE SENSITIVE DATA ON THE PROJECT.
+    //THIS INCLUDES API KEYS.
+    //DO NOT COMMIT WITH API KEYS
+    //DO NOT COMMIT WITH API KEYS
+    //DO NOT COMMIT WITH API KEYS
     public Provider_OpenWeather(){
         //start structure that maps condition codes to weatherStatus
         mapConditionCodes();
@@ -60,6 +67,9 @@ public class Provider_OpenWeather implements Provider {
         //default location for requests(São Paulo)
         this.zone= new Location(-23.533773,-46.625290);
         
+	//Your OpenWeather API key goes here (hardcoded for now,
+	//will be configurable in future revisions)
+	//WHEN COMMITTING, ENSURE THIS FIELD IS EMPTY|
 	this.appid="";
 	
     }
@@ -104,7 +114,8 @@ public class Provider_OpenWeather implements Provider {
 	try{
 	//if json fetch succeeds, parse data into internal WeatherLog object
         String rawJSON=service.send(request, HttpResponse.BodyHandlers.ofString()).body();
-        JSONObject json=new JSONObject(rawJSON);
+        this.JSONReport=rawJSON;
+	JSONObject json=new JSONObject(rawJSON);
 	
 	json=json.getJSONObject("current");//weather for current time
 	double temp=json.getDouble("temp");
@@ -133,6 +144,11 @@ public class Provider_OpenWeather implements Provider {
 	return "temperature is " + json.getDouble("current.temp")
 		+"\ncurrent ID is " + json.getInt("current.weather.0.id")
 		;
+    }
+    
+    //get last JSON fetched as a string
+    public String getJSON(){
+	return this.JSONReport;
     }
     
 }

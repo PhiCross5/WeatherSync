@@ -1,0 +1,2 @@
+GOAL FOR r1:
+print current weather for RIGHT HERE, RIGHT NOW.
