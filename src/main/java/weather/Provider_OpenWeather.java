@@ -56,9 +56,7 @@ public class Provider_OpenWeather implements Provider {
         //prepare http
         service=HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
-                .followRedirects(HttpClient.Redirect.NORMAL)
                 .connectTimeout(Duration.ofSeconds(10))
-                .authenticator(Authenticator.getDefault())
                 .build();
         
         //base URL for JSON API requests to openWeather
@@ -87,7 +85,7 @@ public class Provider_OpenWeather implements Provider {
     private WeatherStatus computeStatus(int conditionCode){
        //get it from json object
         if(conditionCode==800){
-	    return WeatherStatus.SUNNY;
+	    return WeatherStatus.CLEAR;
 	}
 	else{
 	    if((conditionCode/100)!=5 | (conditionCode/100)!=8){
@@ -127,12 +125,16 @@ public class Provider_OpenWeather implements Provider {
 	}
 	//failure modes (may include: offline, interrupted, invalid, etc.)
         catch(IOException | InterruptedException io){
+	    System.out.println("FAILURE: could not fetch JSON online!");
             System.out.println(io);
         }
         
         return null;
     }
     
+    public void setZone(Location fresh){
+	this.zone=fresh;
+    }
     
     
     //test functions (please remove after it's confirmed working)
@@ -149,5 +151,6 @@ public class Provider_OpenWeather implements Provider {
     public String getJSON(){
 	return this.JSONReport;
     }
+    
     
 }

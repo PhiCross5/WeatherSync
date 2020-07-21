@@ -26,7 +26,7 @@ public class WeatherStatus {
     private WeatherStatus(String description){
         this.description=description;
     }
-    public static WeatherStatus SUNNY= new WeatherStatus("sunny");
+    public static WeatherStatus CLEAR= new WeatherStatus("clear skies");
     public static WeatherStatus CLOUDY=new WeatherStatus("cloudy");
     public static WeatherStatus RAINING=new WeatherStatus("raining");
    

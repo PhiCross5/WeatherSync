@@ -10,23 +10,25 @@ import weather.MinimalLog;
 import weather.Provider;
 import weather.Provider_OpenWeather;
 
-import confidential.SuperSecretData;
+//only for devs!
+//import confidential.SuperSecretData;
 /**
  *
  * @author neido
  */
-public class OpenWeather_fetch {
+public class run {
     public static void main(String[] args) {
 	double latitude;
 	double longitude;
-	String apiKey;
+	String apiKey="";
 	if(args.length>0){
 	    apiKey=args[0];
 	    latitude=Double.valueOf(args[1]);
 	    longitude=Double.valueOf(args[2]);
 	}
 	else{
-	    apiKey=SuperSecretData.apiKey;
+	    System.out.println("usage: run (api key) (latitude) (longitude)");
+	    return;
 	}
 	
 	/*
@@ -36,13 +38,14 @@ public class OpenWeather_fetch {
 	
 	//put your api key here
 	Provider_OpenWeather provider=new Provider_OpenWeather
-	    (SuperSecretData.apiKey);
+	    (apiKey);
 	
 	//dump WeatherLog and Source JSON
 	WeatherLog sauce=provider.getWeather();
 	String doubleCheck=provider.getJSON();
 	System.out.println("**weather provided**");
-	System.out.println(sauce);
+	System.out.println(sauce.getTemperature()-273.15 +"ºC, "
+	+"and it is " + sauce.getStatus());
 	System.out.println("**raw JSON**");
 	System.out.println(doubleCheck);
 	

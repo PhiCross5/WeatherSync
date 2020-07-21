@@ -26,7 +26,7 @@ public class MinimalLog implements WeatherLog{
     }
     
     public String toString(){
-	return "MinimalLog{\nstatus:"+status
-		+"\ntemperature:"+temperature;
+	return "MinimalLog{\nstatus: "+status
+		+"\ntemperature: "+temperature+"\n}";
     }
 }
