@@ -9,6 +9,8 @@ import weather.WeatherLog;
 import weather.MinimalLog;
 import weather.Provider;
 import weather.Provider_OpenWeather;
+
+import confidential.SuperSecretData;
 /**
  *
  * @author neido
@@ -22,8 +24,10 @@ public class OpenWeather_fetch {
 	*/
 	
 	//put your api key here
-	String APIKey="";
-	Provider_OpenWeather provider=new Provider_OpenWeather();
+	Provider_OpenWeather provider=new Provider_OpenWeather
+	    (SuperSecretData.apiKey);
+	
+	//dump WeatherLog and Source JSON
 	
 	
     }

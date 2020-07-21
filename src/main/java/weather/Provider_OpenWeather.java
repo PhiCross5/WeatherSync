@@ -49,7 +49,7 @@ public class Provider_OpenWeather implements Provider {
     //DO NOT COMMIT WITH API KEYS
     //DO NOT COMMIT WITH API KEYS
     //DO NOT COMMIT WITH API KEYS
-    public Provider_OpenWeather(){
+    public Provider_OpenWeather(String keys){
         //start structure that maps condition codes to weatherStatus
         mapConditionCodes();
         
@@ -67,12 +67,11 @@ public class Provider_OpenWeather implements Provider {
         //default location for requests(São Paulo)
         this.zone= new Location(-23.533773,-46.625290);
         
-	//Your OpenWeather API key goes here (hardcoded for now,
-	//will be configurable in future revisions)
-	//WHEN COMMITTING, ENSURE THIS FIELD IS EMPTY|
-	this.appid="";
+	//Your OpenWeather API key goes here
+	this.appid=keys;
 	
     }
+    
     
     private void mapConditionCodes(){
         Map<Integer, WeatherStatus> coarse=new HashMap<>();
