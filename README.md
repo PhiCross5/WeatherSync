@@ -3,10 +3,11 @@ Provide weather for any place at any time using whichever metrics are preferred.
 This application is meant as practice for object-oriented pogramming and may be presented in an academic setting.
 
 ## Project status 
-Very early work in progress. _It just doesn't work™_!
-Mostly consists of interfaces and foundation work.
-Hopefully as work on the 'Primórdio' branch advances enough progress will be made for a terminal application that prints something along the lines of:
-`hello $(CURRENT_TEMP) world, it is $(HOW_HOT_IT_FEELS) today in $(CURRENT_LOCATION)!` 
+A sample is available on the __run__ class. It requires _json-java_ and a valid OpenWeather API key. The first release is coming soon!
+
+## TODO
+- Release  version 1
+- Refactored OpenWeather backend (abstracting http details behind a reusable class would be a good start)
 
 ## About the application's internals and the three-party model
 As of this early stage, WeatherSync is split into 3 main segments: the __provider__, the __consumer__ and the __log__.
