@@ -9,7 +9,7 @@ import weather.WeatherLog;
 import weather.MinimalLog;
 import weather.Provider;
 import weather.Provider_OpenWeather;
-
+import weather.Location;
 //only for devs!
 //import confidential.SuperSecretData;
 /**
@@ -41,7 +41,7 @@ public class run {
 	    (apiKey);
 	
 	//dump WeatherLog and Source JSON
-	WeatherLog sauce=provider.getWeather();
+	WeatherLog sauce=provider.getWeather(new Location(latitude, longitude));
 	String doubleCheck=provider.getJSON();
 	System.out.println("**weather provided**");
 	System.out.println(sauce.getTemperature()-273.15 +"ºC, "

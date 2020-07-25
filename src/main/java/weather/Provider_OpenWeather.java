@@ -132,6 +132,11 @@ public class Provider_OpenWeather implements Provider {
         return null;
     }
     
+    public WeatherLog getWeather(Location loc){
+	zone=loc;
+	return getWeather();
+    }
+    
     public void setZone(Location fresh){
 	this.zone=fresh;
     }
