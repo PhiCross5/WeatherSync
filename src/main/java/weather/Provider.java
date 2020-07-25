@@ -27,4 +27,7 @@ public interface Provider {
     //time and place for everything.
    // public abstract WeatherLog getWeather(LocalDateTime time, Location place);
     
+    public abstract WeatherLog getWeather(Location loc);
+	
+    
 }
