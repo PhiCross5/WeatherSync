@@ -8,8 +8,8 @@ A very basic weather report command is now working. Those eager to have anything
 This library needs java platform 11; the executable from release 1 needs a working internet connection and an OpenWeather API key.
 
 ## TODO
--Unit tests
--1st wave of Refactoring 
+- Unit tests
+- 1st wave of Refactoring 
 
 ## About the application's internals and the three-party model
 As of this early stage, WeatherSync is split into 3 main segments: the __provider__, the __consumer__ and the __log__.
