@@ -24,5 +24,5 @@ A wide variety of tasks may be carried on by the consumer, with outcomes affecte
 Each of these three classes may be further broken down into separate segments if the particular implementation turns out large enough.
 such constructs may include things like:
 - a cache subsystem for a JSON-API-based provider to optimize its network usage.
-- a 4rth party __arbiter__ that checks wether the pieces of weather information required __consumer__ are available from a set of one or more __providers__.
+- a 4rth party __arbiter__ that checks wether the pieces of weather information required by the __consumer__ are available from a set of one or more __providers__.
 - a dedicated __Parameter__ class encapsulating each parameter in the __log__, with methods to identify wether the field is available, what unit it is in and what is its value, be it numerical, boolean or an enumeration.
