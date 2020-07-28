@@ -1,13 +1,15 @@
 # WeatherSync
-Provide weather for any place at any time using whichever metrics are preferred.
-This application is meant as practice for object-oriented pogramming and may be presented in an academic setting.
+Add weather reporting and forecasting capabilities to your application.
 
 ## Project status 
-A sample is available on the __run__ class. It requires _json-java_ and a valid OpenWeather API key. The first release is coming soon!
+A very basic weather report command is now working. Those eager to have anything in working state can grab release 1.
+
+## requirements
+This library needs java platform 11; the executable from release 1 needs a working internet connection and an OpenWeather API key.
 
 ## TODO
-- Release  version 1
-- Refactored OpenWeather backend (abstracting http details behind a reusable class would be a good start)
+-Unit tests
+-1st wave of Refactoring 
 
 ## About the application's internals and the three-party model
 As of this early stage, WeatherSync is split into 3 main segments: the __provider__, the __consumer__ and the __log__.
