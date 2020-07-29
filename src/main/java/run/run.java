@@ -72,8 +72,8 @@ public class run {
 	    }
 	}
 	catch(WeatherUnavailableException e){
-	    System.err.println("Congratulations, you failed! details below:");
-	    System.err.print(e);
+	    System.out.println("could not get weather online!"
+		    +"check your internet connection.");
 	}
     }
 }
