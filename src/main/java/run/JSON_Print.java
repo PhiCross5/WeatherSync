@@ -39,12 +39,12 @@ public class JSON_Print {
 	new FileReader("resources/OneCallSample1.json", Charset.forName("UTF-8")).read(jsonBytes);
 	}
 	catch(FileNotFoundException f){
-	    System.out.println("fuck.");
+	    System.out.println("rather unfortunate.");
 	    System.out.println(f);
 	    return;
 	}
 	catch(IOException f){
-	    System.out.println("double fuck.");
+	    System.out.println("oh noes!");
 	    System.out.println(f);
 	    return;
 	}

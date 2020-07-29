@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -7,8 +7,10 @@ package weather;
 
 /**
  *
- * @author yaichao
+ * @author neido
  */
-public class WeatherState {
-    
+public class ProviderException extends Exception{
+    public String toString(){
+	return "something went wrong in the Provider.";
+    }
 }
