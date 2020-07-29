@@ -88,8 +88,9 @@ public class Provider_OpenWeather implements Provider {
 	    return WeatherStatus.CLEAR;
 	}
 	else{
-	    if((conditionCode/100)!=5 | (conditionCode/100)!=8){
-		System.out.print("ConditionCode not implemented yet: nº"+conditionCode);
+	    if((((int)conditionCode/100)!=5) 
+		    && (((int)conditionCode/100)!=8)){
+		System.out.println("ConditionCode not implemented yet: nº"+conditionCode);
 	    }
 	    return this.ConditionCodes_Coarse.get(conditionCode/100);
 	}
