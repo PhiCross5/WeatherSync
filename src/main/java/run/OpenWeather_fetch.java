@@ -9,6 +9,7 @@ import weather.WeatherLog;
 import weather.MinimalLog;
 import weather.Provider;
 import weather.Provider_OpenWeather;
+import weather.WeatherUnavailableException;
 
 import confidential.SuperSecretData;
 /**
@@ -39,12 +40,17 @@ public class OpenWeather_fetch {
 	    (SuperSecretData.apiKey);
 	
 	//dump WeatherLog and Source JSON
-	WeatherLog sauce=provider.getWeather();
-	String doubleCheck=provider.getJSON();
-	System.out.println("**weather provided**");
-	System.out.println(sauce);
-	System.out.println("**raw JSON**");
-	System.out.println(doubleCheck);
-	
+	try{
+	    WeatherLog sauce=provider.getWeather();
+	    String doubleCheck=provider.getJSON();
+	    System.out.println("**weather provided**");
+	    System.out.println(sauce);
+	    System.out.println("**raw JSON**");
+	    System.out.println(doubleCheck);
+	}
+	catch(WeatherUnavailableException e){
+	    System.err.println("Congratulations, you failed! Details below:");
+	    System.err.println(e);
+	}
     }
 }

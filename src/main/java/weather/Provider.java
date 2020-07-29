@@ -17,7 +17,7 @@ public interface Provider {
     //If Provider is not aware of time or place, the service may
     //use geolocation and its own timekeeping facilities to determine
     //time and place.
-    public abstract WeatherLog getWeather();
+    public abstract WeatherLog getWeather() throws WeatherUnavailableException;
     
     //returns object with the weather for the specified point in time.
     //-may be historical (how it was) or a forecast(how it might be)
@@ -27,7 +27,7 @@ public interface Provider {
     //time and place for everything.
    // public abstract WeatherLog getWeather(LocalDateTime time, Location place);
     
-    public abstract WeatherLog getWeather(Location loc);
+    public abstract WeatherLog getWeather(Location loc) throws WeatherUnavailableException;
 	
     
 }

@@ -97,7 +97,7 @@ public class Provider_OpenWeather implements Provider {
     }
     
     
-    public WeatherLog getWeather(){
+    public WeatherLog getWeather() throws WeatherUnavailableException{
         //fetch JSON for weather via single-call API
 	
 	//build HTTP request
@@ -127,14 +127,18 @@ public class Provider_OpenWeather implements Provider {
         catch(IOException | InterruptedException io){
 	    System.out.println("FAILURE: could not fetch JSON online!");
             System.out.println(io);
+	    throw new WeatherUnavailableException();
         }
-        
-        return null;
     }
     
-    public WeatherLog getWeather(Location loc){
-	zone=loc;
-	return getWeather();
+    public WeatherLog getWeather(Location loc)throws WeatherUnavailableException{
+	try{
+	    zone=loc;
+	    return getWeather();
+	}
+	catch(WeatherUnavailableException e){
+	    throw e;
+	}
     }
     
     public void setZone(Location fresh){
