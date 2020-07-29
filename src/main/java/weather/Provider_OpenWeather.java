@@ -5,9 +5,7 @@
  */
 package weather;
 
-import java.net.Authenticator;
 import java.net.URI;
-import java.time.LocalDateTime;
 
 //Java built-in HTTP client for fetching the JSON Weather report
 import java.net.http.HttpClient;
@@ -17,6 +15,7 @@ import java.time.Duration;
 
 //JSON parser library
 import org.json.JSONObject;
+import org.json.JSONException;
 
 //exceptions
 import java.io.IOException;
@@ -88,8 +87,7 @@ public class Provider_OpenWeather implements Provider {
 	    return WeatherStatus.CLEAR;
 	}
 	else{
-	    if((((int)conditionCode/100)!=5) 
-		    && (((int)conditionCode/100)!=8)){
+	    if((conditionCode/100)!=5 && (conditionCode/100)!=8){
 		System.out.println("ConditionCode not implemented yet: nº"+conditionCode);
 	    }
 	    return this.ConditionCodes_Coarse.get(conditionCode/100);
@@ -98,11 +96,12 @@ public class Provider_OpenWeather implements Provider {
     }
     
     
-    public WeatherLog getWeather() throws WeatherUnavailableException{
+    public WeatherLog getWeather() throws WeatherUnavailableException, JSONException{
         //fetch JSON for weather via single-call API
 	
 	//build HTTP request
 	HttpRequest request = HttpRequest.newBuilder()
+		.GET()
                 .uri(URI.create(requestURL 
                         + "lat="+zone.getLatitude()
                         + "&lon="+zone.getLongitude()
@@ -117,7 +116,7 @@ public class Provider_OpenWeather implements Provider {
 	
 	json=json.getJSONObject("current");//weather for current time
 	double temp=json.getDouble("temp");
-	//current.weather[0].id
+	//JSON nestsed object traversal: current.weather[0].id
 	WeatherStatus id=computeStatus(
 		json.getJSONArray("weather")
 		.getJSONObject(0)
@@ -126,16 +125,17 @@ public class Provider_OpenWeather implements Provider {
 	}
 	//failure modes (may include: offline, interrupted, invalid, etc.)
         catch(IOException | InterruptedException io){
-	    System.out.println("FAILURE: could not fetch JSON online!");
-            System.out.println(io);
-	    throw new WeatherUnavailableException();
+	    throw new WeatherUnavailableException(io);
         }
+	catch(JSONException je){
+	    throw je;
+	}
     }
     
-    public WeatherLog getWeather(Location loc)throws WeatherUnavailableException{
+    public WeatherLog getWeather(Location loc) throws WeatherUnavailableException{
+	zone=loc;
 	try{
-	    zone=loc;
-	    return getWeather();
+	return getWeather();
 	}
 	catch(WeatherUnavailableException e){
 	    throw e;

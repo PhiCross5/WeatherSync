@@ -14,4 +14,7 @@ public class WeatherUnavailableException extends Exception {
     public String toString(){
 	return "could not get valid weather data";
     }
+    public WeatherUnavailableException(Exception e){
+	super(e);
+    }
 }
