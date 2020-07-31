@@ -43,9 +43,10 @@ public class OpenWeather_fetch {
 	    WeatherLog sauce=provider.getWeather();
 	    String doubleCheck=provider.getJSON();
 	    System.out.println("**weather provided**");
-	    System.out.println(sauce.getTemperature()-273.15 +"ºC, "
-	    +"and it is " + sauce.getStatus());
-	    System.out.println(doubleCheck);
+	    System.out.println("temperature:"+(sauce.getTemperature()-273.15)
+		    +"ºC, "
+	    +"\nstatus:" + sauce.getStatus());
+	    System.out.println("\nraw JSON:\n"+doubleCheck);
 	}
 	catch(WeatherUnavailableException e){
 	    System.err.println("Congratulations, you have failed!");

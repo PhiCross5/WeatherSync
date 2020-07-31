@@ -29,5 +29,6 @@ public class WeatherStatus {
     public static WeatherStatus CLEAR= new WeatherStatus("clear skies");
     public static WeatherStatus CLOUDY=new WeatherStatus("cloudy");
     public static WeatherStatus RAINING=new WeatherStatus("raining");
+    public static WeatherStatus UNDEFINED=new WeatherStatus("*undefined*");
    
 }
