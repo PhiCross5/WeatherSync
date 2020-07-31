@@ -89,6 +89,7 @@ public class Provider_OpenWeather implements Provider {
 	else{
 	    if((conditionCode/100)!=5 && (conditionCode/100)!=8){
 		System.err.println("ConditionCode not implemented or invalid: nº"+conditionCode);
+		return WeatherStatus.UNDEFINED;
 	    }
 	    return this.ConditionCodes_Coarse.get(conditionCode/100);
 	}
