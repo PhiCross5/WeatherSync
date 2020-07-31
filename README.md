@@ -11,7 +11,7 @@ This library needs java platform 11; the executable from release 1 needs a worki
 - Unit tests
 - 1st wave of Refactoring 
 
-## About the application's internals and the three-party model
+## About the API's internals and the three-party model
 As of this early stage, WeatherSync is split into 3 main segments: the __provider__, the __consumer__ and the __log__.
 ### Provider
 this class is responsible for acquiring weather-related data from an external agent and generating a properly formatted __log__ upon request of the __consumer__.
