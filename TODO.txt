@@ -1,2 +1,5 @@
-GOAL FOR r1:
-print current weather for RIGHT HERE, RIGHT NOW.
+CURRENTLY ON REFACTORING, 1ST WAVE.
+GOAL FOR R2:
+    -Add National Weather JSON backend.
+EXTRA FOR R2(MAY BE POSTPONED TO R3):
+    -Add wind speed to weatherLog and the backends.
