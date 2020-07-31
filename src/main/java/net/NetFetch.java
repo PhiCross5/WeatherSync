@@ -45,7 +45,7 @@ public class NetFetch {
     }
     
     //get a String as a resource described by a URL.
-    public String fetchString(String url)throws UnreachableException, CriticalException{
+    public String fetchString(String url)throws NoResponseException, CriticalException{
 	try{
 	    HttpRequest request=HttpRequest.newBuilder()
 		    .GET()
@@ -57,14 +57,18 @@ public class NetFetch {
 	return reply;
 	}
 	
-	/*some unforeseen situations may lead to the HTTP subsystem
-	not acquiring any response. 
+	/*
+	Sometimes the host system may not have a working internet connection 
+	or the servers might be offline. This will trigger an exception 
+	that the caller must handle.
 	*/
 	catch(IOException | InterruptedException e){
-	    throw new UnreachableException(e);
+	    throw new NoResponseException(e);
 	}
 	
-	/* malformed Uniform Resource Identifiers mean serious business.
+	/* All callers in this package provide hard-coded strings
+	as an argument, thus if the URI is wrong once,
+	it will bewrong everytime.
 	This should absolutely not happen.
 	*/
 	catch(URISyntaxException e){
@@ -73,8 +77,11 @@ public class NetFetch {
 	
     }
     
-    //place-holder stub.
-    public byte[] fetchBinary(String url) throws UnreachableException, CriticalException{
+    
+    /*get some resource online as a binary stream.
+	this lower level method is a last resort and should be avoided
+    */
+    public byte[] fetchBinary(String url) throws NoResponseException, CriticalException{
 	try{
 	    HttpRequest request=HttpRequest.newBuilder()
 		    .GET()
@@ -86,7 +93,7 @@ public class NetFetch {
 	return reply;
 	}
 	catch(IOException | InterruptedException e){
-	    throw new UnreachableException(e);
+	    throw new NoResponseException(e);
 	}
 	catch(URISyntaxException e){
 	    throw new CriticalException(e);

@@ -9,6 +9,10 @@ package common;
  *
  * @author neido
  */
+
+/*This Exception is raised when Poorly written/untested code in the 
+Weather subsystem itself leads it to a dysfunctional and unrecoverable state.
+*/
 public class CriticalException extends Exception{
     
     public CriticalException(){
