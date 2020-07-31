@@ -26,16 +26,12 @@ import common.CriticalException;
 public class NetFetch {
     
     HttpClient client;
-    HttpRequest req;
     
     //sane defaults for an HTTP client interface.
     public NetFetch(){
 	client=HttpClient.newBuilder()
 		.version(HttpClient.Version.HTTP_2)
 		.connectTimeout(Duration.ofSeconds(30))
-		.build();
-	req=HttpRequest.newBuilder()
-		.GET()
 		.build();
 		}
     
@@ -51,7 +47,7 @@ public class NetFetch {
 		    .GET()
 		    .uri(new URI(url))
 		    .build();
-	String reply=client.send(req,
+	String reply=client.send(request,
 		HttpResponse.BodyHandlers.ofString(Charset.forName("UTF-8")))
 		.body();
 	return reply;
