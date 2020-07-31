@@ -13,11 +13,15 @@ import common.CriticalException;
  *
  * @author neido
  */
+
+/*
+Fetch 'pudim.com.br' webpage as String and print it to terminal
+*/
 public class httpString {
     public static void main(String[] args){
 	NetFetch http=new NetFetch();
 	try{
-	    String dumplers=http.fetchString("https://www.whoami.com");
+	    String dumplers=http.fetchString("http://www.pudim.com.br");
 	    System.out.println("text acquired: \n"+dumplers);
 	}
 	catch(NoResponseException e){
