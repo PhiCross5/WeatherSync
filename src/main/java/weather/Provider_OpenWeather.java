@@ -30,6 +30,8 @@ import java.util.HashMap;
 /*
 Implementation of the Provider interface that uses OpenWeatherMap online
 services as a backend.
+This backend requires an OpenWeather API key. Whatever application uses it
+must have a means of retrieving such key.
 */
 public class Provider_OpenWeather implements Provider {
  
@@ -70,6 +72,8 @@ public class Provider_OpenWeather implements Provider {
 	These methods are meant to allow reuse and to split long
 	portions of code into smaller, properly identified chunks.
     */
+    
+    /*Initialize the condition code hashmap for use by ComputeStatus()*/
     private void mapConditionCodes(){
         Map<Integer, WeatherStatus> coarse=new HashMap<>();
         coarse.put(5, WeatherStatus.RAINING);
@@ -77,34 +81,30 @@ public class Provider_OpenWeather implements Provider {
         this.ConditionCodes_Coarse=coarse;
     }
     
-    //TODO: implement hashmap conversion for MORE conditionCodes
-    /*translate weather id (Weather Code as per OpenWeather documentation)
+    /*translate weather id (Condition Code as per OpenWeather documentation)
     into a reference to its corresponding WeatherStatus.
-    Details:
-    as per the table defined by OpenWeather themselves, the condition of 
-    the skies is represented by a 3-digit integer, where the 1st digit
-    represents a course-grained description (cloud, no cloud, rain, snow)
-    and the following two digits further specify it in levels 
-    (e.g. 800=no clouds, 801=little cloudiness, 802=cloudy, 803=very cloudy)
-    for more information on what exactly the numbers mean, check out
+    More information on condition codes at this link
     https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
     */
     private WeatherStatus computeStatus(int conditionCode){
        /*for some reason, 'clear skies' is assigned a number in the same
 	8xx region as the 'cloudy'-like weather codes.
-	actually, never mind, 'clear skies' = 'no cloud' = 800.
+	perhaps they thought 'clear skies' is just
+	'cloudy' with no clouds.
 	*/
         if(conditionCode==800){
 	    return WeatherStatus.CLEAR;
 	}
 	else{
+	    /*not all conditions are currently implemented.
+	    some of them might not ever be supported.*/
 	    if((conditionCode/100)!=5 && (conditionCode/100)!=8){
 		System.err.println("ConditionCode not implemented or invalid: nº"+conditionCode);
 		return WeatherStatus.UNDEFINED;
 	    }
+	    //take only 3rd digit into account; pass it through a map
 	    return this.ConditionCodes_Coarse.get(conditionCode/100);
 	}
-        //return this.ConditionCodes_Coarse.get()
     }
     
     
