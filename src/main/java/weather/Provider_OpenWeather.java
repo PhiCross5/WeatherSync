@@ -70,7 +70,10 @@ public class Provider_OpenWeather implements Provider {
 	
     }
     
-    
+    /*INTERNAL HELPER FUNCTIONS
+	These methods are meant to allow reuse and to split long
+	portions of code into smaller, properly identified chunks.
+    */
     private void mapConditionCodes(){
         Map<Integer, WeatherStatus> coarse=new HashMap<>();
         coarse.put(5, WeatherStatus.RAINING);
@@ -97,29 +100,47 @@ public class Provider_OpenWeather implements Provider {
         //return this.ConditionCodes_Coarse.get()
     }
     
+    
+    /*'Provider' ROLE
+    
+    */
+    
+    /*
+    Get JSON out of an HTTP request to OpenWeather, parse JSON into internal
+    WeatherLog representation and provide the WeatherLog.
+    */
     @Override
     public WeatherLog getWeather(Location loc) 
 	    throws WeatherUnavailableException, CriticalException{
-	 //fetch JSON for weather via single-call API
-	
-	
 	try{
-	    //if json fetch succeeds, parse data into internal WeatherLog object
+	    //get JSON online as string
 	    String rawJSON=http.fetchString(domainURL+"lat="+loc.getLatitude()
 		+"&lon="+loc.getLongitude()
 		+"&appid="+this.appid);
 	    this.JSONReport=rawJSON;
+	    
+	    //turn string into proper JSON object
 	    JSONObject json=new JSONObject(rawJSON);
-
+	    
+	    //traversal: current weather(JSON:this.current)
 	    json=json.getJSONObject("current");//weather for current time
+	    
+	    //get temperature from JSON.
+	    //(JSON:this.current.temp)
 	    double temp=json.getDouble("temp");
-	    //JSON nested object traversal: current.weather[0].id
+	    
+	    //decode the overall condition of the skies as an ID;
+	    //convert that ID into an internal WeatherStatus representation.
+	    //(JSON: current.weather[0].id)
 	    WeatherStatus id=computeStatus(
 		    json.getJSONArray("weather")
 		    .getJSONObject(0)
 		    .getInt("id"));
+	    
+	    //finally, pack it into a WeatherLog and return the new instance.
 	    return new MinimalLog(id, temp);
 	}
+	
 	//failure modes (may include: offline, interrupted, invalid, etc.)
 	//Caller might want to retry a few times, just in case
         catch(NoResponseException |JSONException e ){
@@ -130,12 +151,11 @@ public class Provider_OpenWeather implements Provider {
 	}
     }
     
-    public void setZone(Location fresh){
-	this.zone=fresh;
-    }
     
     
-    //test functions (please remove after it's confirmed working)
+    /*METHODS FOR TESTING
+    
+    */
     
     //json object parse test
     public String JSONEntryPoint(String input){
