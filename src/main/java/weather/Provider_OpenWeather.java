@@ -33,10 +33,9 @@ services as a backend.
 */
 public class Provider_OpenWeather implements Provider {
  
+    //last JSON String fetched.
+    //might be used for caching in a future revision.
     String JSONReport;
-    double temperature;
-    WeatherStatus status;
-    Location zone;
     
     NetFetch http;
     String domainURL;
@@ -62,9 +61,6 @@ public class Provider_OpenWeather implements Provider {
         //base URL for JSON API requests to openWeather
         this.domainURL="https://api.openweathermap.org/data/2.5/onecall?";
         
-        //default location for requests(São Paulo)
-        this.zone= new Location(-23.533773,-46.625290);
-        
 	//Your OpenWeather API key goes here
 	this.appid=keys;
 	
@@ -81,12 +77,13 @@ public class Provider_OpenWeather implements Provider {
         this.ConditionCodes_Coarse=coarse;
     }
     
-    public double getTemperature(){
-        return this.temperature;
-    }
     //TODO: implement hashmap conversion for MORE conditionCodes
+    /*translate weather id (Weather Code as per OpenWeather documentation)
+    into a reference to its corresponding WeatherStatus.
+    
+    */
     private WeatherStatus computeStatus(int conditionCode){
-       //get it from json object
+       //for some reason, 'Clear skies' is assigned a number 
         if(conditionCode==800){
 	    return WeatherStatus.CLEAR;
 	}
