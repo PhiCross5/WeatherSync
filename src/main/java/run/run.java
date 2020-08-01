@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package run;
+import common.CriticalException;
 import weather.WeatherStatus;
 import weather.WeatherLog;
 import weather.MinimalLog;
@@ -74,6 +75,10 @@ public class run {
 	catch(WeatherUnavailableException e){
 	    System.out.println("could not get weather online!"
 		    +"check your internet connection.");
+	}
+	catch(CriticalException c){
+	    System.err.println("something went fantastically wrong.");
+	    System.err.println(c);
 	}
     }
 }

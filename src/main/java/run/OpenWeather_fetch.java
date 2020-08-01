@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package run;
+
+import common.CriticalException;
+
 import weather.WeatherStatus;
 import weather.WeatherLog;
 import weather.MinimalLog;
@@ -12,6 +15,8 @@ import weather.Provider_OpenWeather;
 import weather.WeatherUnavailableException;
 import confidential.SuperSecretData;
 import weather.Location;
+
+
 /**
  *
  * @author neido
@@ -64,6 +69,10 @@ public class OpenWeather_fetch {
 	catch(WeatherUnavailableException e){
 	    System.err.println("Congratulations, you have failed!");
 	    System.err.println("details below:\n"+e);
+	}
+	catch(CriticalException c){
+	    System.err.println("something went fantastically wrong.");
+	    System.err.println(c);
 	}
     }
 }
