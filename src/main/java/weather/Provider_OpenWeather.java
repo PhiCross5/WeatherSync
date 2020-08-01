@@ -74,7 +74,7 @@ public class Provider_OpenWeather implements Provider {
     public double getTemperature(){
         return this.temperature;
     }
-    //TODO: implement hashmap conversion for conditionCodes
+    //TODO: implement hashmap conversion for MORE conditionCodes
     private WeatherStatus computeStatus(int conditionCode){
        //get it from json object
         if(conditionCode==800){
@@ -97,23 +97,24 @@ public class Provider_OpenWeather implements Provider {
 	
 	
 	try{
-	//if json fetch succeeds, parse data into internal WeatherLog object
-        String rawJSON=http.fetchString(domainURL+"lat="+loc.getLatitude()
-	    +"&lon="+loc.getLongitude()
-	    +"&appid="+this.appid);
-        this.JSONReport=rawJSON;
-	JSONObject json=new JSONObject(rawJSON);
-	
-	json=json.getJSONObject("current");//weather for current time
-	double temp=json.getDouble("temp");
-	//JSON nestsed object traversal: current.weather[0].id
-	WeatherStatus id=computeStatus(
-		json.getJSONArray("weather")
-		.getJSONObject(0)
-		.getInt("id"));
-	return new MinimalLog(id, temp);
+	    //if json fetch succeeds, parse data into internal WeatherLog object
+	    String rawJSON=http.fetchString(domainURL+"lat="+loc.getLatitude()
+		+"&lon="+loc.getLongitude()
+		+"&appid="+this.appid);
+	    this.JSONReport=rawJSON;
+	    JSONObject json=new JSONObject(rawJSON);
+
+	    json=json.getJSONObject("current");//weather for current time
+	    double temp=json.getDouble("temp");
+	    //JSON nested object traversal: current.weather[0].id
+	    WeatherStatus id=computeStatus(
+		    json.getJSONArray("weather")
+		    .getJSONObject(0)
+		    .getInt("id"));
+	    return new MinimalLog(id, temp);
 	}
 	//failure modes (may include: offline, interrupted, invalid, etc.)
+	//Caller might want to retry a few times, just in case
         catch(NoResponseException |JSONException e ){
 	    throw new WeatherUnavailableException(e);
         }
