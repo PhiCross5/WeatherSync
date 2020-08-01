@@ -24,6 +24,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 
 import org.json.JSONException;
+import common.CriticalException;
 
 /**
  *
@@ -75,7 +76,8 @@ public class Provider_OpenWeatherTest {
 	System.out.println("Testing weather fetch");
 	Provider_OpenWeather provider=new Provider_OpenWeather(this.key);
 	try{
-	    provider.getWeather();
+	    provider.getWeather(new Location(-23.533773,-46.625290));
+	    assertNotNull(provider);
 	}
 	catch(WeatherUnavailableException e){
 	    System.err.println("could not get weather online");
@@ -83,6 +85,10 @@ public class Provider_OpenWeatherTest {
 	}
 	catch(JSONException je){
 	    System.err.println("JSON parsing issues");
+	    fail();
+	}
+	catch(CriticalException e){
+	    System.err.println("very serious issue.");
 	    fail();
 	}
     }
