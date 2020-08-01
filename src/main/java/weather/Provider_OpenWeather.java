@@ -5,10 +5,12 @@
  */
 package weather;
 
+//If serious issues arise.
 import common.CriticalException;
 
 import java.net.URI;
 
+//network abstraction (for http)
 import net.NetFetch;
 import net.NoResponseException;
 
@@ -17,13 +19,18 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 
-//collections for mapping OpenWeather's weathercodes to weatherStatus
+//collections for mapping OpenWeather's weathercodes to WeatherStatus
 import java.util.Map;
 import java.util.HashMap;
 /**
  *
  * @author neido
  */
+
+/*
+Implementation of the Provider interface that uses OpenWeatherMap online
+services as a backend.
+*/
 public class Provider_OpenWeather implements Provider {
  
     String JSONReport;
