@@ -80,10 +80,20 @@ public class Provider_OpenWeather implements Provider {
     //TODO: implement hashmap conversion for MORE conditionCodes
     /*translate weather id (Weather Code as per OpenWeather documentation)
     into a reference to its corresponding WeatherStatus.
-    
+    Details:
+    as per the table defined by OpenWeather themselves, the condition of 
+    the skies is represented by a 3-digit integer, where the 1st digit
+    represents a course-grained description (cloud, no cloud, rain, snow)
+    and the following two digits further specify it in levels 
+    (e.g. 800=no clouds, 801=little cloudiness, 802=cloudy, 803=very cloudy)
+    for more information on what exactly the numbers mean, check out
+    https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
     */
     private WeatherStatus computeStatus(int conditionCode){
-       //for some reason, 'Clear skies' is assigned a number 
+       /*for some reason, 'clear skies' is assigned a number in the same
+	8xx region as the 'cloudy'-like weather codes.
+	actually, never mind, 'clear skies' = 'no cloud' = 800.
+	*/
         if(conditionCode==800){
 	    return WeatherStatus.CLEAR;
 	}
