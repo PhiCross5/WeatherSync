@@ -5,20 +5,17 @@
  */
 package weather;
 
+import common.CriticalException;
+
 import java.net.URI;
 
-//Java built-in HTTP client for fetching the JSON Weather report
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import net.NetFetch;
+import net.NoResponseException;
 
 //JSON parser library
 import org.json.JSONObject;
 import org.json.JSONException;
 
-//exceptions
-import java.io.IOException;
 
 //collections for mapping OpenWeather's weathercodes to weatherStatus
 import java.util.Map;
@@ -34,8 +31,8 @@ public class Provider_OpenWeather implements Provider {
     WeatherStatus status;
     Location zone;
     
-    HttpClient service;
-    String requestURL;
+    NetFetch http;
+    String domainURL;
     String appid; //mandatory OpenWeather API key (one per user, registration required)
     //insert weather IDs here(check openweather API documentation for the codes)
     private Map<Integer, WeatherStatus> ConditionCodes_Coarse;//coarse codes (5xx=raining, 8xx=cloudy)
@@ -53,13 +50,10 @@ public class Provider_OpenWeather implements Provider {
         mapConditionCodes();
         
         //prepare http
-        service=HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .connectTimeout(Duration.ofSeconds(10))
-                .build();
+        this.http=new NetFetch();
         
         //base URL for JSON API requests to openWeather
-        this.requestURL="https://api.openweathermap.org/data/2.5/onecall?";
+        this.domainURL="https://api.openweathermap.org/data/2.5/onecall?";
         
         //default location for requests(São Paulo)
         this.zone= new Location(-23.533773,-46.625290);
@@ -96,22 +90,17 @@ public class Provider_OpenWeather implements Provider {
         //return this.ConditionCodes_Coarse.get()
     }
     
-    
-    public WeatherLog getWeather() throws WeatherUnavailableException, JSONException{
-        //fetch JSON for weather via single-call API
+    @Override
+    public WeatherLog getWeather(Location loc) 
+	    throws WeatherUnavailableException, CriticalException{
+	 //fetch JSON for weather via single-call API
 	
-	//build HTTP request
-	HttpRequest request = HttpRequest.newBuilder()
-		.GET()
-                .uri(URI.create(requestURL 
-                        + "lat="+zone.getLatitude()
-                        + "&lon="+zone.getLongitude()
-                        + "&appid="+this.appid))
-                .build();
-        //send HTTP request
+	
 	try{
 	//if json fetch succeeds, parse data into internal WeatherLog object
-        String rawJSON=service.send(request, HttpResponse.BodyHandlers.ofString()).body();
+        String rawJSON=http.fetchString(domainURL+"lat="+loc.getLatitude()
+	    +"&lon="+loc.getLongitude()
+	    +"&appid="+this.appid);
         this.JSONReport=rawJSON;
 	JSONObject json=new JSONObject(rawJSON);
 	
@@ -125,20 +114,10 @@ public class Provider_OpenWeather implements Provider {
 	return new MinimalLog(id, temp);
 	}
 	//failure modes (may include: offline, interrupted, invalid, etc.)
-        catch(IOException | InterruptedException io){
-	    throw new WeatherUnavailableException(io);
+        catch(NoResponseException |JSONException e ){
+	    throw new WeatherUnavailableException(e);
         }
-	catch(JSONException je){
-	    throw je;
-	}
-    }
-    
-    public WeatherLog getWeather(Location loc) throws WeatherUnavailableException{
-	zone=loc;
-	try{
-	return getWeather();
-	}
-	catch(WeatherUnavailableException e){
+	catch(CriticalException e){
 	    throw e;
 	}
     }
