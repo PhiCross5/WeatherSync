@@ -38,7 +38,7 @@ public class Provider_OpenWeather implements Provider {
     //last JSON String fetched.
     //might be used for caching in a future revision.
     String JSONReport;
-    
+    WeatherStatus status;
     NetFetch http;
     String domainURL;
     String appid; //mandatory OpenWeather API key (one per user, registration required)
@@ -54,6 +54,8 @@ public class Provider_OpenWeather implements Provider {
     //DO NOT COMMIT WITH API KEYS
     //DO NOT COMMIT WITH API KEYS
     public Provider_OpenWeather(String keys){
+	//get WeatherStatus singleton
+	status=WeatherStatus.getInstance();
         //start structure that maps condition codes to weatherStatus
         mapConditionCodes();
         
@@ -76,8 +78,8 @@ public class Provider_OpenWeather implements Provider {
     /*Initialize the condition code hashmap for use by ComputeStatus()*/
     private void mapConditionCodes(){
         Map<Integer, WeatherStatus> coarse=new HashMap<>();
-        coarse.put(5, WeatherStatus.RAINING);
-        coarse.put(8, WeatherStatus.CLOUDY);
+        coarse.put(5, this.status.RAINING);
+        coarse.put(8, this.status.CLOUDY);
         this.ConditionCodes_Coarse=coarse;
     }
     
@@ -93,14 +95,14 @@ public class Provider_OpenWeather implements Provider {
 	'cloudy' with no clouds.
 	*/
         if(conditionCode==800){
-	    return WeatherStatus.CLEAR;
+	    return this.status.CLEAR;
 	}
 	else{
 	    /*not all conditions are currently implemented.
 	    some of them might not ever be supported.*/
 	    if((conditionCode/100)!=5 && (conditionCode/100)!=8){
 		System.err.println("ConditionCode not implemented or invalid: nº"+conditionCode);
-		return WeatherStatus.UNDEFINED;
+		return this.status.UNDEFINED;
 	    }
 	    //take only 3rd digit into account; pass it through a map
 	    return this.ConditionCodes_Coarse.get(conditionCode/100);
