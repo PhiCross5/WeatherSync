@@ -15,10 +15,10 @@ Tasks recently done:
 	at least be aware that the Weather Subsystem can no longer function.
     -Offload network interaction from Providers to a separate class
 	(That is the whole point of creating the Network abstraction).
+    -Convert WeatherStatus class from static to singleton to allow renaming.
 
 
 Tasks:
-    -Convert WeatherStatus class from static to singleton to allow renaming.
 
 GOAL FOR R2:
     -Add National Weather Provider in same working state as OpenWeather.
