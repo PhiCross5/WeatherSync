@@ -8,15 +8,17 @@ Tasks recently done:
     -Add 'NoResponseException' Exception that represents the possibility
 	of 'NetFetch' failing to acquire the data a caller expects .
 
-    (CODE STRUCTURE)
+
+    (ARCHITECTURE/DOMAIN)
     -Add generic 'CriticalException' Exception for unrecoverable situations.
 	This is meant for failing gracefully, allowing an application to 
 	at least be aware that the Weather Subsystem can no longer function.
-
-Tasks:
     -Offload network interaction from Providers to a separate class
 	(That is the whole point of creating the Network abstraction).
-    -
+
+
+Tasks:
+    -Convert WeatherStatus class from static to singleton to allow renaming.
 
 GOAL FOR R2:
     -Add National Weather Provider in same working state as OpenWeather.
