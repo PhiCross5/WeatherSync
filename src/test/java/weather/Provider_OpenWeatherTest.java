@@ -34,6 +34,8 @@ public class Provider_OpenWeatherTest {
     
     private String key=SuperSecretData.apiKey;
     
+    static Provider_OpenWeather provider;
+    
     public Provider_OpenWeatherTest() {
     }
 
@@ -56,6 +58,8 @@ public class Provider_OpenWeatherTest {
 	    System.err.println("HTTP problem! details:\n"+e);
 	    System.exit(1);
 	}
+	
+	provider=new Provider_OpenWeather(SuperSecretData.apiKey);
     }
 
     @org.junit.jupiter.api.AfterAll
@@ -74,7 +78,6 @@ public class Provider_OpenWeatherTest {
     @Test
     public void testGetWeather(){
 	System.out.println("Testing weather fetch");
-	Provider_OpenWeather provider=new Provider_OpenWeather(this.key);
 	try{
 	    provider.getWeather(new Location(-23.533773,-46.625290));
 	    assertNotNull(provider);
@@ -92,5 +95,6 @@ public class Provider_OpenWeatherTest {
 	    fail();
 	}
     }
+    
     
 }
