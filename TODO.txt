@@ -19,7 +19,7 @@ Tasks recently done:
 
 
 Tasks:
-
+    -
 GOAL FOR R2:
     -Add National Weather Provider in same working state as OpenWeather.
 EXTRA FOR R2(MAY BE POSTPONED TO R3):
