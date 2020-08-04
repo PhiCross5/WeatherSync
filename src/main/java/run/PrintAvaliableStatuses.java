@@ -11,6 +11,7 @@ import weather.WeatherStatus;
  */
 public class PrintAvaliableStatuses {
     public static void main(String args[]){
-        System.out.print(WeatherStatus.CLEAR);
+	WeatherStatus status=WeatherStatus.getInstance();
+        System.out.print(status.CLEAR);
     }
 }

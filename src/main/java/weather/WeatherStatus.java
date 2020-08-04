@@ -18,7 +18,18 @@ or "raining".
 parameters of a full-fledged model for convenience.
 */
 public class WeatherStatus {
-    String description;
+    private String description;
+
+    public static WeatherStatus instance=new WeatherStatus();
+    
+    public WeatherStatus CLEAR;
+    public WeatherStatus CLOUDY;
+    public WeatherStatus RAINING;
+    public WeatherStatus UNDEFINED;
+    
+    public static WeatherStatus getInstance(){
+	return instance;
+    }
     
     public String toString(){
         return description;
@@ -26,8 +37,11 @@ public class WeatherStatus {
     private WeatherStatus(String description){
         this.description=description;
     }
-    public static WeatherStatus CLEAR= new WeatherStatus("clear skies");
-    public static WeatherStatus CLOUDY=new WeatherStatus("cloudy");
-    public static WeatherStatus RAINING=new WeatherStatus("raining");
-   
+    private WeatherStatus(){
+	CLEAR= new WeatherStatus("clear skies");
+	CLOUDY=new WeatherStatus("cloudy");
+	RAINING=new WeatherStatus("raining");
+	UNDEFINED=new WeatherStatus("*undefined*");
+    }
+    
 }

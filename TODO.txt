@@ -1,2 +1,26 @@
-GOAL FOR r1:
-print current weather for RIGHT HERE, RIGHT NOW.
+CURRENTLY ON REFACTORING, 1ST WAVE.
+
+Tasks recently done:
+    (NETWORKING)
+    -Add 'net' package for network-related stuff.
+	Anything that talks to stuff other than the host computer goes there.
+    -Add 'NetFetch'class for high-level network operations.
+    -Add 'NoResponseException' Exception that represents the possibility
+	of 'NetFetch' failing to acquire the data a caller expects .
+
+
+    (ARCHITECTURE/DOMAIN)
+    -Add generic 'CriticalException' Exception for unrecoverable situations.
+	This is meant for failing gracefully, allowing an application to 
+	at least be aware that the Weather Subsystem can no longer function.
+    -Offload network interaction from Providers to a separate class
+	(That is the whole point of creating the Network abstraction).
+
+
+Tasks:
+    -Convert WeatherStatus class from static to singleton to allow renaming.
+
+GOAL FOR R2:
+    -Add National Weather Provider in same working state as OpenWeather.
+EXTRA FOR R2(MAY BE POSTPONED TO R3):
+    -Add wind speed to weatherLog and the backends.

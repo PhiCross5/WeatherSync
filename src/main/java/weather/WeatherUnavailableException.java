@@ -10,11 +10,10 @@ package weather;
  * @author neido
  */
 public class WeatherUnavailableException extends Exception {
-    
     public String toString(){
-	return "could not get valid weather data";
+	return "Provider could not acquire valid weather data";
     }
-    public WeatherUnavailableException(Exception e){
-	super(e);
+    public WeatherUnavailableException(Throwable cause){
+	super(cause);
     }
 }

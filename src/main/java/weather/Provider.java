@@ -6,6 +6,7 @@
 package weather;
 
 import java.time.LocalDateTime;
+import common.CriticalException;
 
 /**
  *
@@ -17,8 +18,10 @@ public interface Provider {
     //If Provider is not aware of time or place, the service may
     //use geolocation and its own timekeeping facilities to determine
     //time and place.
-    public abstract WeatherLog getWeather() throws WeatherUnavailableException;
-    
+    /*
+    public abstract WeatherLog getWeather() 
+	    throws WeatherUnavailableException, CriticalException;
+    */
     //returns object with the weather for the specified point in time.
     //-may be historical (how it was) or a forecast(how it might be)
    // public abstract WeatherLog getWeather(LocalDateTime time);
@@ -27,7 +30,8 @@ public interface Provider {
     //time and place for everything.
    // public abstract WeatherLog getWeather(LocalDateTime time, Location place);
     
-    public abstract WeatherLog getWeather(Location loc) throws WeatherUnavailableException;
+    public abstract WeatherLog getWeather(Location loc) 
+	    throws WeatherUnavailableException, CriticalException;
 	
     
 }

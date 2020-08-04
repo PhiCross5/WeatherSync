@@ -5,37 +5,42 @@
  */
 package weather;
 
+//If serious issues arise.
+import common.CriticalException;
+
 import java.net.URI;
 
-//Java built-in HTTP client for fetching the JSON Weather report
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+//network abstraction (for http)
+import net.NetFetch;
+import net.NoResponseException;
 
 //JSON parser library
 import org.json.JSONObject;
 import org.json.JSONException;
 
-//exceptions
-import java.io.IOException;
 
-//collections for mapping OpenWeather's weathercodes to weatherStatus
+//collections for mapping OpenWeather's weathercodes to WeatherStatus
 import java.util.Map;
 import java.util.HashMap;
 /**
  *
  * @author neido
  */
+
+/*
+Implementation of the Provider interface that uses OpenWeatherMap online
+services as a backend.
+This backend requires an OpenWeather API key. Whatever application uses it
+must have a means of retrieving such key.
+*/
 public class Provider_OpenWeather implements Provider {
  
+    //last JSON String fetched.
+    //might be used for caching in a future revision.
     String JSONReport;
-    double temperature;
     WeatherStatus status;
-    Location zone;
-    
-    HttpClient service;
-    String requestURL;
+    NetFetch http;
+    String domainURL;
     String appid; //mandatory OpenWeather API key (one per user, registration required)
     //insert weather IDs here(check openweather API documentation for the codes)
     private Map<Integer, WeatherStatus> ConditionCodes_Coarse;//coarse codes (5xx=raining, 8xx=cloudy)
@@ -49,105 +54,117 @@ public class Provider_OpenWeather implements Provider {
     //DO NOT COMMIT WITH API KEYS
     //DO NOT COMMIT WITH API KEYS
     public Provider_OpenWeather(String keys){
+	//get WeatherStatus singleton
+	status=WeatherStatus.getInstance();
         //start structure that maps condition codes to weatherStatus
         mapConditionCodes();
         
         //prepare http
-        service=HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .connectTimeout(Duration.ofSeconds(10))
-                .build();
+        this.http=new NetFetch();
         
         //base URL for JSON API requests to openWeather
-        this.requestURL="https://api.openweathermap.org/data/2.5/onecall?";
-        
-        //default location for requests(São Paulo)
-        this.zone= new Location(-23.533773,-46.625290);
+        this.domainURL="https://api.openweathermap.org/data/2.5/onecall?";
         
 	//Your OpenWeather API key goes here
 	this.appid=keys;
 	
     }
     
+    /*INTERNAL HELPER FUNCTIONS
+	These methods are meant to allow reuse and to split long
+	portions of code into smaller, properly identified chunks.
+    */
     
+    /*Initialize the condition code hashmap for use by ComputeStatus()*/
     private void mapConditionCodes(){
         Map<Integer, WeatherStatus> coarse=new HashMap<>();
-        coarse.put(5, WeatherStatus.RAINING);
-        coarse.put(8, WeatherStatus.CLOUDY);
+        coarse.put(5, this.status.RAINING);
+        coarse.put(8, this.status.CLOUDY);
         this.ConditionCodes_Coarse=coarse;
     }
     
-    public double getTemperature(){
-        return this.temperature;
-    }
-    //TODO: implement hashmap conversion for conditionCodes
+    /*translate weather id (Condition Code as per OpenWeather documentation)
+    into a reference to its corresponding WeatherStatus.
+    More information on condition codes at this link
+    https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+    */
     private WeatherStatus computeStatus(int conditionCode){
-       //get it from json object
+       /*for some reason, 'clear skies' is assigned a number in the same
+	8xx region as the 'cloudy'-like weather codes.
+	perhaps they thought 'clear skies' is just
+	'cloudy' with no clouds.
+	*/
         if(conditionCode==800){
-	    return WeatherStatus.CLEAR;
+	    return this.status.CLEAR;
 	}
 	else{
+	    /*not all conditions are currently implemented.
+	    some of them might not ever be supported.*/
 	    if((conditionCode/100)!=5 && (conditionCode/100)!=8){
-		System.out.println("ConditionCode not implemented yet: nº"+conditionCode);
+		System.err.println("ConditionCode not implemented or invalid: nº"+conditionCode);
+		return this.status.UNDEFINED;
 	    }
+	    //take only 3rd digit into account; pass it through a map
 	    return this.ConditionCodes_Coarse.get(conditionCode/100);
 	}
-        //return this.ConditionCodes_Coarse.get()
     }
     
     
-    public WeatherLog getWeather() throws WeatherUnavailableException, JSONException{
-        //fetch JSON for weather via single-call API
-	
-	//build HTTP request
-	HttpRequest request = HttpRequest.newBuilder()
-		.GET()
-                .uri(URI.create(requestURL 
-                        + "lat="+zone.getLatitude()
-                        + "&lon="+zone.getLongitude()
-                        + "&appid="+this.appid))
-                .build();
-        //send HTTP request
+    /*'Provider' ROLE
+    
+    */
+    
+    /*
+    Get JSON out of an HTTP request to OpenWeather, parse JSON into internal
+    WeatherLog representation and provide the WeatherLog.
+    */
+    @Override
+    public WeatherLog getWeather(Location loc) 
+	    throws WeatherUnavailableException, CriticalException{
 	try{
-	//if json fetch succeeds, parse data into internal WeatherLog object
-        String rawJSON=service.send(request, HttpResponse.BodyHandlers.ofString()).body();
-        this.JSONReport=rawJSON;
-	JSONObject json=new JSONObject(rawJSON);
-	
-	json=json.getJSONObject("current");//weather for current time
-	double temp=json.getDouble("temp");
-	//JSON nestsed object traversal: current.weather[0].id
-	WeatherStatus id=computeStatus(
-		json.getJSONArray("weather")
-		.getJSONObject(0)
-		.getInt("id"));
-	return new MinimalLog(id, temp);
+	    //get JSON online as string
+	    String rawJSON=http.fetchString(domainURL+"lat="+loc.getLatitude()
+		+"&lon="+loc.getLongitude()
+		+"&appid="+this.appid);
+	    this.JSONReport=rawJSON;
+	    
+	    //turn string into proper JSON object
+	    JSONObject json=new JSONObject(rawJSON);
+	    
+	    //traversal: current weather(JSON:this.current)
+	    json=json.getJSONObject("current");//weather for current time
+	    
+	    //get temperature from JSON.
+	    //(JSON:this.current.temp)
+	    double temp=json.getDouble("temp");
+	    
+	    //decode the overall condition of the skies as an ID;
+	    //convert that ID into an internal WeatherStatus representation.
+	    //(JSON: current.weather[0].id)
+	    WeatherStatus id=computeStatus(
+		    json.getJSONArray("weather")
+		    .getJSONObject(0)
+		    .getInt("id"));
+	    
+	    //finally, pack it into a WeatherLog and return the new instance.
+	    return new MinimalLog(id, temp);
 	}
+	
 	//failure modes (may include: offline, interrupted, invalid, etc.)
-        catch(IOException | InterruptedException io){
-	    throw new WeatherUnavailableException(io);
+	//Caller might want to retry a few times, just in case
+        catch(NoResponseException |JSONException e ){
+	    throw new WeatherUnavailableException(e);
         }
-	catch(JSONException je){
-	    throw je;
-	}
-    }
-    
-    public WeatherLog getWeather(Location loc) throws WeatherUnavailableException{
-	zone=loc;
-	try{
-	return getWeather();
-	}
-	catch(WeatherUnavailableException e){
+	catch(CriticalException e){
 	    throw e;
 	}
     }
     
-    public void setZone(Location fresh){
-	this.zone=fresh;
-    }
     
     
-    //test functions (please remove after it's confirmed working)
+    /*METHODS FOR TESTING
+    
+    */
     
     //json object parse test
     public String JSONEntryPoint(String input){
