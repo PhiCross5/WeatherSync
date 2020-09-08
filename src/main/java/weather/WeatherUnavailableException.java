@@ -9,6 +9,10 @@ package weather;
  *
  * @author neido
  */
+
+/**
+ Thrown when a provider is unable to make or update a WeatherLog.
+ **/
 public class WeatherUnavailableException extends Exception {
     public String toString(){
 	return "Provider could not acquire valid weather data";
