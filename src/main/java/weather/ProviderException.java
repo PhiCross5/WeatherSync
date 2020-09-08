@@ -9,6 +9,10 @@ package weather;
  *
  * @author neido
  */
+
+/**
+ Generic exception for things that go wrong in the provider.
+ **/
 public class ProviderException extends Exception{
     public String toString(){
 	return "something went wrong in the Provider.";
