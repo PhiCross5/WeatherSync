@@ -12,6 +12,9 @@ import common.CriticalException;
  *
  * @author yaichao
  */
+
+/**Interface for objects that return whole WeatherLogs.
+ **/
 public interface Provider {
     
     //How is the weather right here, right now.

@@ -9,6 +9,9 @@ package weather;
  *
  * @author yaichao
  */
+
+/**representation of some place in the globe
+ **/
 public class Location {
     double latitude;
     double longitude;
