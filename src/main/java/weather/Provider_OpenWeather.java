@@ -27,12 +27,12 @@ import java.util.HashMap;
  * @author neido
  */
 
-/*
+/**
 Implementation of the Provider interface that uses OpenWeatherMap online
 services as a backend.
 This backend requires an OpenWeather API key. Whatever application uses it
 must have a means of retrieving such key.
-*/
+**/
 public class Provider_OpenWeather implements Provider {
  
     //last JSON String fetched.
@@ -53,6 +53,8 @@ public class Provider_OpenWeather implements Provider {
     //DO NOT COMMIT WITH API KEYS
     //DO NOT COMMIT WITH API KEYS
     //DO NOT COMMIT WITH API KEYS
+    /**Returns a Provider that uses OpenWeatherMap services to get the weather.
+     @param keys	    A <a href=https://openweathermap.org/full-price#currentvalid> API key</a> acquired from OpenWeatherMap**/
     public Provider_OpenWeather(String keys){
 	//get WeatherStatus singleton
 	status=WeatherStatus.getInstance();
@@ -87,6 +89,7 @@ public class Provider_OpenWeather implements Provider {
     into a reference to its corresponding WeatherStatus.
     More information on condition codes at this link
     https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+    * @param conditionCode	Weather code (follows OpenWeatherMap definition)
     */
     private WeatherStatus computeStatus(int conditionCode){
        /*for some reason, 'clear skies' is assigned a number in the same
