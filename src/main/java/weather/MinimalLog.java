@@ -11,12 +11,16 @@ package weather;
  */
 
 /**MinimalLog is the least common denominator among encapsulated weather data
- objects. It is simple to integrate, carries only the most used parameters
-  and has a consistent API.**/
+ objects. It is simple to integrate and carries only the most used parameters.**/
 public class MinimalLog implements WeatherLog{
     WeatherStatus status;
     double temperature;
     
+    /**
+     * 
+     * @param st status for this log
+     * @param tp temperature for this log
+     */
     public MinimalLog(WeatherStatus st, double tp){
         status=st;
         temperature=tp;
