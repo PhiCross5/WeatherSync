@@ -1,3 +1,6 @@
+# NOTICE OF DISCONTINUATION
+Before i can make APIs, i must first learn to __use__ APIs. Whoever wishes to use whatever scaffolding i provided is free to do so, as long as you give me credit for it.
+Please look forward for the upcoming, much less ambitious, good-practice-abiding weather-forecast-related project from yours truly, PhiCross5!
 # WeatherSync
 Add weather reporting and forecasting capabilities to your application.
 
